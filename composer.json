@@ -1,0 +1,48 @@
+{
+    "name": "esit/fakertoolbox",
+    "description": "Es handelt sich um eine Erweiterung für das Open Source CMS Contao",
+    "license": "proprietary",
+    "type": "contao-bundle",
+    "authors": [
+        {
+            "name": "Patrick Froch",
+            "email": "info@easySolutionsIT.de",
+            "homepage": "http://easySolutionsIT.de",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "info@easySolutionsIT.de"
+    },
+    "require": {
+        "php": "^7.2",
+        "contao/core-bundle": "^4.4",
+        "contao/manager-bundle": "^4.4",
+        "contao/conflicts": "@dev",
+        "fzaninotto/faker": "^1.9"
+    },
+    "require-dev": {
+        "contao/test-case": "^4.0",
+        "roave/security-advisories": "dev-master",
+        "phpunit/phpunit": "^8.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Esit\\Fakertoolbox\\": ""
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "Esit\\Fakertoolbox\\Classes\\Contao\\Manager\\Plugin",
+        "composertoolbox": {
+            "require": {
+                "esit/fakertoolbox": "^1.0"
+            },
+            "repositories": {
+                "esit/fakertoolbox": {
+                    "type": "vcs",
+                    "url": "https://gitlab+deploy-token-XX:XXXXXXXXXXXXXXXXXXXXX@esit-projekt.de/pfroch/XXXXXKUNDEXXXXX_fakertoolbox_dev4.git"
+                }
+            }
+        }
+    }
+}
