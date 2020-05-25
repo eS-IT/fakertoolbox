@@ -182,7 +182,7 @@ $faker      = $factory->getFaker('tl_member');
 $testData   = $faker->getRows(50);
 ```
 
-## Running the ests
+## Running the tests
 
 Im Verzeichnis der Erweiterung folgenden Befehl aufrufen:
 
