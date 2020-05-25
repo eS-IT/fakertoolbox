@@ -11,6 +11,8 @@
  */
 namespace Esit\Fakertoolbox\Classes\Faker;
 
+use Faker\Provider\Base;
+
 /**
  * Class ContaoFaker
  * Fassade für ContaoFaker Klassen
@@ -42,6 +44,17 @@ class ContaoFaker
         $this->elemet       = $elemet;
         $this->collection   = $collection;
     }
+
+
+    /**
+     * Fügt Faker einen eigenen Provider hinzu.
+     * @param Base $provider
+     */
+    public function addProvider(Base $provider): void
+    {
+        $this->elemet->addProvider($provider);
+    }
+
 
 
     /**

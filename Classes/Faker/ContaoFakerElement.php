@@ -14,6 +14,7 @@ namespace Esit\Fakertoolbox\Classes\Faker;
 use Esit\Fakertoolbox\Classes\Exception\LocalStringIsEmptyException;
 use Faker\Factory;
 use Faker\Generator;
+use Faker\Provider\Base;
 
 /**
  * Class ContaoFakerElement
@@ -58,6 +59,16 @@ class ContaoFakerElement
     public function setFaker(Generator $faker): void
     {
         $this->faker = $faker;
+    }
+
+
+    /**
+     * Fügt Faker einen Provider hinzu.
+     * @param Base $provider
+     */
+    public function addProvider(Base $provider): void
+    {
+        $this->faker->addProvider($provider);
     }
 
 

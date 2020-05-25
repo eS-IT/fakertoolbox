@@ -1,3 +1,6 @@
+1.0.3
+Close #3 - Lizenz in composer.json anpassen
+
 1.0.2
 Close #2 - composer.sig entfernen
 

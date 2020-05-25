@@ -14,6 +14,7 @@ namespace Esit\Fakertoolbox\Tests\Faker;
 use Esit\Fakertoolbox\Classes\Faker\ContaoFaker;
 use Esit\Fakertoolbox\Classes\Faker\ContaoFakerCollection;
 use Esit\Fakertoolbox\Classes\Faker\ContaoFakerElement;
+use Faker\Provider\Base;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,7 +47,7 @@ class ContaoFakerTest extends TestCase
     {
         $this->element      = $this->getMockBuilder(ContaoFakerElement::class)
                                    ->disableOriginalConstructor()
-                                   ->onlyMethods(['get'])
+                                   ->onlyMethods(['get', 'addProvider'])
                                    ->getMock();
         $this->collection   = $this->getMockBuilder(ContaoFakerCollection::class)
                                    ->disableOriginalConstructor()
@@ -76,5 +77,13 @@ class ContaoFakerTest extends TestCase
     {
         $this->collection->expects($this->once())->method('getRows')->with(5);
         $this->conatoFaker->getRows(5);
+    }
+
+
+    public function testAddProviderCallsElementAddPRovider(): void
+    {
+        $base = $this->getMockBuilder(Base::class)->disableOriginalConstructor()->getMock();
+        $this->element->expects($this->once())->method('addProvider')->with($base);
+        $this->conatoFaker->addProvider($base);
     }
 }

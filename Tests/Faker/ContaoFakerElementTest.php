@@ -14,6 +14,7 @@ namespace Esit\Fakertoolbox\Tests\Faker;
 use Esit\Fakertoolbox\Classes\Exception\LocalStringIsEmptyException;
 use Esit\Fakertoolbox\Classes\Faker\ContaoFakerElement;
 use Esit\Fakertoolbox\Classes\Faker\DcaExtractor;
+use Faker\Provider\Base;
 use PHPUnit\Framework\TestCase;
 use Faker\Generator;
 
@@ -37,7 +38,8 @@ class ContaoFakerElementTest extends TestCase
     {
         $this->faker        = $this->getMockBuilder(Generator::class)
                                    ->disableOriginalConstructor()
-                                   ->addMethods(['optional', 'firstname'])
+                                   ->addMethods(['optional', 'firstname', 'unique'])
+                                   ->onlyMethods(['addProvider'])
                                    ->getMock();
         $this->extractor    = $this->getMockBuilder(DcaExtractor::class)
                                    ->disableOriginalConstructor()
@@ -81,5 +83,15 @@ class ContaoFakerElementTest extends TestCase
         $element->setFaker($this->faker);
         $rtn = $element->get($fielname);
         $this->assertSame($expected, $rtn);
+    }
+
+
+    public function testAddProviderCallsFakerAddProvider(): void
+    {
+        $base       = $this->getMockBuilder(Base::class)->disableOriginalConstructor()->getMock();
+        $element    = new ContaoFakerElement($this->extractor);
+        $this->faker->expects($this->once())->method('addProvider')->with($base);
+        $element->setFaker($this->faker);
+        $element->addProvider($base);
     }
 }
