@@ -92,7 +92,12 @@ class ContaoFakerElement
         $method     = $this->dca->getFakerMethod($fieldname);
         $parameters = $this->dca->getFakerArguments($fieldname);
         $optional   = $this->dca->getFakerOptional($fieldname);
+        $unique     = $this->dca->getFakerUnique($fieldname);
         $faker      = $this->faker;
+
+        if (true === $unique) {
+            $faker->unique();
+        }
 
         if (!empty($optional)) {
             $faker = \call_user_func_array([$faker, 'optional'], $optional);

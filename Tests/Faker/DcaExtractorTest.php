@@ -134,4 +134,42 @@ class DcaExtractorTest extends TestCase
         $rtn        = $extractor->getFakerFields();
         $this->assertSame(['id', 'name'], $rtn);
     }
+
+
+    public function testGetFakerUniqueReturnFalseIfNotFound(): void
+    {
+        $GLOBALS['TL_DCA']['tl_table']['fields']['id']['eval'] = [
+            'tl_class'          => 'w50',
+            'fakerMethod'       => 'firstname'
+        ];
+        $extractor  = new DcaExtractor('tl_table');
+        $rtn        = $extractor->getFakerUnique('id');
+        $this->assertFalse($rtn);
+    }
+
+
+    public function testGetFakerUniqueReturnFalseIfItIsFalse(): void
+    {
+        $GLOBALS['TL_DCA']['tl_table']['fields']['id']['eval'] = [
+            'tl_class'      => 'w50',
+            'fakerMethod'   => 'firstname',
+            'fakerUnique'    => false
+        ];
+        $extractor  = new DcaExtractor('tl_table');
+        $rtn        = $extractor->getFakerUnique('id');
+        $this->assertFalse($rtn);
+    }
+
+
+    public function testGetFakerUniqueReturnTrueIfItIsTrue(): void
+    {
+        $GLOBALS['TL_DCA']['tl_table']['fields']['id']['eval'] = [
+            'tl_class'      => 'w50',
+            'fakerMethod'   => 'firstname',
+            'fakerUnique'    => true
+        ];
+        $extractor  = new DcaExtractor('tl_table');
+        $rtn        = $extractor->getFakerUnique('id');
+        $this->assertTrue($rtn);
+    }
 }

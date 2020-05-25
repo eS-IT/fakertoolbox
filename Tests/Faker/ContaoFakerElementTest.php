@@ -43,7 +43,11 @@ class ContaoFakerElementTest extends TestCase
                                    ->getMock();
         $this->extractor    = $this->getMockBuilder(DcaExtractor::class)
                                    ->disableOriginalConstructor()
-                                   ->onlyMethods(['getFakerMethod', 'getFakerArguments', 'getFakerOptional'])
+                                   ->onlyMethods([
+                                       'getFakerMethod',
+                                       'getFakerArguments',
+                                       'getFakerOptional',
+                                       'getFakerUnique'])
                                    ->getMock();
     }
 
@@ -62,6 +66,7 @@ class ContaoFakerElementTest extends TestCase
         $this->extractor->expects($this->once())->method('getFakerMethod')->with($fielname)->willReturn('firstname');
         $this->extractor->expects($this->once())->method('getFakerArguments')->with($fielname)->willReturn([]);
         $this->extractor->expects($this->once())->method('getFakerOptional')->with($fielname)->willReturn([]);
+        $this->extractor->expects($this->once())->method('getFakerUnique')->with($fielname)->willReturn(false);
         $this->faker->expects($this->once())->method('firstname')->willReturn($expected);
         $element = new ContaoFakerElement($this->extractor);
         $element->setFaker($this->faker);
@@ -70,15 +75,33 @@ class ContaoFakerElementTest extends TestCase
     }
 
 
-    public function testGetCallFaker(): void
+    public function testGetCallFakerOptional(): void
     {
         $fielname   = 'name';
         $expected   = 'Martin';
         $this->extractor->expects($this->once())->method('getFakerMethod')->with($fielname)->willReturn('firstname');
         $this->extractor->expects($this->once())->method('getFakerArguments')->with($fielname)->willReturn([]);
         $this->extractor->expects($this->once())->method('getFakerOptional')->with($fielname)->willReturn([1, 2]);
+        $this->extractor->expects($this->once())->method('getFakerUnique')->with($fielname)->willReturn(false);
         $this->faker->expects($this->once())->method('firstname')->willReturn($expected);
         $this->faker->expects($this->once())->method('optional')->with(1,2)->willReturn($this->returnSelf());
+        $element = new ContaoFakerElement($this->extractor);
+        $element->setFaker($this->faker);
+        $rtn = $element->get($fielname);
+        $this->assertSame($expected, $rtn);
+    }
+
+
+    public function testGetCallFakerUnique(): void
+    {
+        $fielname   = 'name';
+        $expected   = 'Martin';
+        $this->extractor->expects($this->once())->method('getFakerMethod')->with($fielname)->willReturn('firstname');
+        $this->extractor->expects($this->once())->method('getFakerArguments')->with($fielname)->willReturn([]);
+        $this->extractor->expects($this->once())->method('getFakerOptional')->with($fielname)->willReturn([]);
+        $this->extractor->expects($this->once())->method('getFakerUnique')->with($fielname)->willReturn(true);
+        $this->faker->expects($this->once())->method('firstname')->willReturn($expected);
+        $this->faker->expects($this->once())->method('unique')->willReturn($expected);
         $element = new ContaoFakerElement($this->extractor);
         $element->setFaker($this->faker);
         $rtn = $element->get($fielname);

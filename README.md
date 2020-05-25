@@ -80,6 +80,24 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['id']['eval']['fakerOptional']    = [0
 
 Gibt mit einer Wahrscheinlichkeit von 60% einen Vornamen und sonst einen Leerstring zurück.
 
+### `fakerUnique`
+
+Ist `fakerUnique` auf true gesetzt, werden immer unterschiedliche Werte zurückgegeben. Ist dies nicht möglich, weil
+z.B. der Vorrat an zur Verfügung stehenden Elementen erschöpft ist, wird ein Fehler erzeugt
+(s. [Modifiers](https://github.com/fzaninotto/Faker#modifiers)).
+
+__Beispiel:__
+
+```php
+$GLOBALS['TL_DCA']['tl_member']['fields']['id']['eval']['fakerMethod']      = 'numberBetween';
+$GLOBALS['TL_DCA']['tl_member']['fields']['id']['eval']['fakerParameter']   = [1, 3];
+$GLOBALS['TL_DCA']['tl_member']['fields']['id']['eval']['fakerUnique']      = true;
+```
+
+Bei der oberen Konfiguration würde ein Fehler erzeugt, wenn keine neue Zahlen zwischen 1 und 3 mehr zurückgegeben
+werden können.
+
+
 ## Verwendung
 
 ### Fabrik für die Erstellung

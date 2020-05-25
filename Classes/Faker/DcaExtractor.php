@@ -106,6 +106,21 @@ class DcaExtractor
 
 
     /**
+     * Gibt die für das übergebene Feld zu verwendene Parameter zurück.
+     * @param $fieldname
+     * @return bool
+     */
+    public function getFakerUnique($fieldname): bool
+    {
+        if (isset($this->dca[$fieldname]['eval']['fakerUnique'])) {
+            return $this->dca[$fieldname]['eval']['fakerUnique'] ? true : false;
+        }
+
+        return false;
+    }
+
+
+    /**
      * Gibt alle Felder zurück, bei denen eine Fakermethode defineirt ist.
      * @return array
      */
