@@ -14,41 +14,14 @@ namespace Esit\Fakertoolbox\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Class EsitFakertoolboxExtension
  * @package Esit\Fakertoolbox\DependencyInjection
  */
-class EsitFakertoolboxExtension extends Extension implements PrependExtensionInterface
+class EsitFakertoolboxExtension extends Extension
 {
-
-
-    /**
-     * Konfiguriert den Logger, damit die Konfiguration nicht in app/config/config.yml geschrieben werden muss.
-     * @param ContainerBuilder $container
-     */
-    public function prepend(ContainerBuilder $container): void
-    {
-        $configFile     = '/src/Esit/Fakertoolbox/Resources/config/logger.yml';
-        $pathForRelpace = '/src/Esit/Fakertoolbox/Classes/Services';
-
-        // Kernel hier nicht verfügbar, root manuell erstellen!
-        $root = str_replace($pathForRelpace, '', __DIR__);
-
-        if (\is_file($root . '/' . $configFile)) {
-            // Konfiguration aus Yaml-Datei laden
-            $configs = Yaml::parseFile($root . $configFile);
-
-            if (\is_array($configs)) {
-                // Konfiguraionen verarbeiten
-                foreach ($configs as $bundle => $config) {
-                    $container->prependExtensionConfig($bundle, $config);
-                }
-            }
-        }
-    }
 
 
     /**
@@ -64,12 +37,6 @@ class EsitFakertoolboxExtension extends Extension implements PrependExtensionInt
             new FileLocator(__DIR__ . '/../Resources/config')
         );
 
-        if (\is_file(__DIR__ . '/../Resources/config/services.yml')) {
-            $loader->load('services.yml');
-        }
-
-        if (\is_file(__DIR__ . '/../Resources/config/listener.yml')) {
-            $loader->load('listener.yml');
-        }
+        $loader->load('services.yml');
     }
 }

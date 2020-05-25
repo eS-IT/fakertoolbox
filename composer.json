@@ -22,9 +22,7 @@
         "fzaninotto/faker": "^1.9"
     },
     "require-dev": {
-        "contao/test-case": "^4.0",
-        "roave/security-advisories": "dev-master",
-        "phpunit/phpunit": "^8.5"
+        "contao/test-case": "^4.1"
     },
     "autoload": {
         "psr-4": {
@@ -32,17 +30,6 @@
         }
     },
     "extra": {
-        "contao-manager-plugin": "Esit\\Fakertoolbox\\Classes\\Contao\\Manager\\Plugin",
-        "composertoolbox": {
-            "require": {
-                "esit/fakertoolbox": "^1.0"
-            },
-            "repositories": {
-                "esit/fakertoolbox": {
-                    "type": "vcs",
-                    "url": "https://gitlab+deploy-token-XX:XXXXXXXXXXXXXXXXXXXXX@esit-projekt.de/pfroch/XXXXXKUNDEXXXXX_fakertoolbox_dev4.git"
-                }
-            }
-        }
+        "contao-manager-plugin": "Esit\\Fakertoolbox\\Classes\\Contao\\Manager\\Plugin"
     }
 }

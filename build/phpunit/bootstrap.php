@@ -19,7 +19,6 @@
 
 $buildDir       = __DIR__ . '/..';
 $rootDir        = __DIR__ . '/../..';
-$testCase       = __DIR__ . '/EsitTestCase.php';
 
  if (substr_count(__DIR__, '/src/Esit/')) {
      $arrPaths = explode('/src/Esit/', __DIR__);
@@ -58,9 +57,3 @@ $testCase       = __DIR__ . '/EsitTestCase.php';
  if (false === $autoloadFound) {
      throw new \Exception("No autoload found");
  }
-
-if (is_file($testCase)) {
-    include_once($testCase);
-} else {
-    throw new \Exception('Testcase is missing: ' . $testCase);
-}

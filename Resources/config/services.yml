@@ -1,0 +1,6 @@
+# Services
+services:
+    # Factories
+    esit_fakertoolbox.services.factories.fakerfactory:
+        class: Esit\Fakertoolbox\Classes\Services\Factories\FakerFactory
+        public: true
