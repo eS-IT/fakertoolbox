@@ -47,7 +47,7 @@ class ContaoFakerTest extends TestCase
     {
         $this->element      = $this->getMockBuilder(ContaoFakerElement::class)
                                    ->disableOriginalConstructor()
-                                   ->onlyMethods(['get', 'addProvider'])
+                                   ->onlyMethods(['get', 'addProvider', 'seed'])
                                    ->getMock();
         $this->collection   = $this->getMockBuilder(ContaoFakerCollection::class)
                                    ->disableOriginalConstructor()
@@ -85,5 +85,12 @@ class ContaoFakerTest extends TestCase
         $base = $this->getMockBuilder(Base::class)->disableOriginalConstructor()->getMock();
         $this->element->expects($this->once())->method('addProvider')->with($base);
         $this->conatoFaker->addProvider($base);
+    }
+
+
+    public function testSeedCallsElementSeed(): void
+    {
+        $this->element->expects($this->once())->method('seed')->with(12);
+        $this->conatoFaker->seed(12);
     }
 }

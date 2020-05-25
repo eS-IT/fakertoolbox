@@ -56,6 +56,15 @@ class ContaoFaker
     }
 
 
+    /**
+     * Setzt den Seed für den Generator.
+     * @param int $seed
+     */
+    public function seed(int $seed): void
+    {
+        $this->elemet->seed($seed);
+    }
+
 
     /**
      * Gibt einen Wert für das übergebene Feld zurück.

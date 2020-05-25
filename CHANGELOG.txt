@@ -1,3 +1,6 @@
+Current Changes
+Close #5 - Möglichkeit schaffen eigene Provider hinzuzufügen
+
 1.0.3
 Close #3 - Lizenz in composer.json anpassen
 

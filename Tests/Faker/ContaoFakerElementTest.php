@@ -39,7 +39,7 @@ class ContaoFakerElementTest extends TestCase
         $this->faker        = $this->getMockBuilder(Generator::class)
                                    ->disableOriginalConstructor()
                                    ->addMethods(['optional', 'firstname', 'unique'])
-                                   ->onlyMethods(['addProvider'])
+                                   ->onlyMethods(['addProvider', 'seed'])
                                    ->getMock();
         $this->extractor    = $this->getMockBuilder(DcaExtractor::class)
                                    ->disableOriginalConstructor()
@@ -93,5 +93,14 @@ class ContaoFakerElementTest extends TestCase
         $this->faker->expects($this->once())->method('addProvider')->with($base);
         $element->setFaker($this->faker);
         $element->addProvider($base);
+    }
+
+
+    public function testSeedCallsFakerSeed(): void
+    {
+        $this->faker->expects($this->once())->method('seed')->with(12);
+        $element = new ContaoFakerElement($this->extractor);
+        $element->setFaker($this->faker);
+        $element->seed(12);
     }
 }
