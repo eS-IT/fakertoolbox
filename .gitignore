@@ -13,4 +13,5 @@
 autoload*
 vendor/
 **/**/*.example
-Resources/contao/dca/tl_member.php
+composer.sig
+composer.zip
