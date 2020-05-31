@@ -11,7 +11,9 @@
 
 *.cache
 autoload*
-vendor/
-**/**/*.example
 composer.sig
 composer.zip
+vendor/
+**/**/*.example
+Classes/Contao/Elements/
+Resources/contao/

@@ -111,11 +111,11 @@ class ContaoFakerElementTest extends TestCase
 
     public function testAddProviderCallsFakerAddProvider(): void
     {
-        $base       = $this->getMockBuilder(Base::class)->disableOriginalConstructor()->getMock();
         $element    = new ContaoFakerElement($this->extractor);
-        $this->faker->expects($this->once())->method('addProvider')->with($base);
+        $test       = new ProviderTestClass($this->faker);
+        $this->faker->expects($this->once())->method('addProvider')->with($test);
         $element->setFaker($this->faker);
-        $element->addProvider($base);
+        $element->addProvider(ProviderTestClass::class);
     }
 
 
@@ -127,3 +127,5 @@ class ContaoFakerElementTest extends TestCase
         $element->seed(12);
     }
 }
+
+class ProviderTestClass extends Base{}

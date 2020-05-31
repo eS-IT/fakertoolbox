@@ -82,7 +82,7 @@ class ContaoFakerTest extends TestCase
 
     public function testAddProviderCallsElementAddPRovider(): void
     {
-        $base = $this->getMockBuilder(Base::class)->disableOriginalConstructor()->getMock();
+        $base = Base::class;
         $this->element->expects($this->once())->method('addProvider')->with($base);
         $this->conatoFaker->addProvider($base);
     }

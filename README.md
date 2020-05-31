@@ -151,6 +151,39 @@ __Beispiel:__
 $rows = $faker->getRows(5);
 ```
 
+
+## Eigene Provider Registireren
+
+Eigene Provider können einfach über die Fassade registiert werden.
+
+```php
+$factory    = \Contao\System::getContainer()->get('esit_fakertoolbox.services.factories.fakerfactory');
+$faker      = $factory->getFaker('tl_member');
+$faker->addProvider(\Esit\Fakertoolbox\Classes\Provider\Internet::class);
+```
+
+`\Esit\Fakertoolbox\Classes\Provider\Internet::class` muss durch den eigenen Provider ersetzt werden.
+
+
+## Mitgelieferte Provider
+
+Zusätzlich zu den Providern, die Faker bietet, werden einige spezielle Provider für Contao bereitgestellt.
+
+### `internetAddress`
+
+Die der Provider liefert eine Internetadresse mit Protokoll zurück (z.B. `https://www.example.org/`). In 80 % der
+Aufrufe wird die Adresse mit `www` erstellt. Die zuverwendenen Protokolle (z.B. `https://` oder `http://`) können
+angegeben werden. Wobei `https://` und `http://` Standard sind, sie müssen nicht angegeben werden.
+
+__Beispiel:__
+
+```php
+$GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerMethod']     = 'internetAddress';
+$GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerParameter']  = [['https://', 'http://']]; // kann entfallen, da die Protokolle der Standardfall sind.
+$GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerOptional']   = [0.9, '']; // 10% chance of getting emtpy string
+```
+
+
 ## Komplettbeispiel
 
 ### Erweiterung des DCAs
@@ -199,6 +232,7 @@ $factory    = \Contao\System::getContainer()->get('esit_fakertoolbox.services.fa
 $faker      = $factory->getFaker('tl_member');
 $testData   = $faker->getRows(50);
 ```
+
 
 ## Running the tests
 

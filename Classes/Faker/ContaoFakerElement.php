@@ -12,9 +12,9 @@
 namespace Esit\Fakertoolbox\Classes\Faker;
 
 use Esit\Fakertoolbox\Classes\Exception\LocalStringIsEmptyException;
+use Esit\Fakertoolbox\Classes\Provider\Internet;
 use Faker\Factory;
 use Faker\Generator;
-use Faker\Provider\Base;
 
 /**
  * Class ContaoFakerElement
@@ -49,6 +49,9 @@ class ContaoFakerElement
 
         $this->dca = $dca;
         $this->setFaker(Factory::create($local));
+
+        // add own provider
+        $this->addProvider(Internet::class);
     }
 
 
@@ -64,11 +67,12 @@ class ContaoFakerElement
 
     /**
      * Fügt Faker einen Provider hinzu.
-     * @param Base $provider
+     * @param string $provider
      */
-    public function addProvider(Base $provider): void
+    public function addProvider(string $provider): void
     {
-        $this->faker->addProvider($provider);
+        $newProvider = new $provider($this->faker);
+        $this->faker->addProvider($newProvider);
     }
 
 
