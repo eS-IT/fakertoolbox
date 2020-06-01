@@ -1,3 +1,6 @@
+1.2.1
+Close #11 - Lizenz für composer angepasst
+
 1.2.0
 Close #9 - Option für serialisierte Daten implementieren
 

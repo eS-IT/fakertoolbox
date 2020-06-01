@@ -4,8 +4,8 @@
 ## Beschreibung
 
 Bei dieser Software handelt es sich um eine Erweiterung für das Open Source CMS Contao, die es erlaubt direkt im DCA
-die Definition für Testdaten zu hinterlegen und dann mit einfachen Aufrufen per Faker Testdaten für einzelne Felder
-oder ganze Tabellenzeilen erstellen zu lassen.
+die Definition für Testdaten zu hinterlegen und dann mit einfachen Aufrufen per [Faker](https://github.com/fzaninotto/Faker)
+Testdaten für einzelne Felder oder ganze Tabellenzeilen erstellen zu lassen.
 
 ## Lizenz
 
@@ -36,7 +36,7 @@ Die Installation ist einfach über den Contao Manager möglich, dort nach `esit/
 
 ## Einrichtung
 
-Im DCA gibt es drei Einträge, die in das `eval`-Array eingefügt werden können:
+Im DCA gibt es vier Einträge, die in das `eval`-Array eingefügt werden können:
 
 ### `fakerMethod`
 
@@ -50,11 +50,11 @@ __Beispiel:__
 $GLOBALS['TL_DCA']['tl_member']['fields']['firstname']['eval']['fakerMethod'] = 'firstName';
 ```
 
-Erstellt einen Vornamen, wenn ein Testwert für das Feld `tl_member.firstname` erstellt werden soll.
+Es wird ein Vornamen erstellt, wenn ein Testwert für das Feld `tl_member.firstname` angefragt wird.
 
 ### `fakerParameter`
 
-Mit `fakerParameter` kann man Parameter für die Erstellungsmethode definieren, so kann man z.B. einen Zahlenbereich
+Mit `fakerParameter` kann man Parameter für die Erstellungsmethode definieren, so kann man z.B. den Zahlenbereich
 eingrenzen.
 
 __Beispiel:__
@@ -64,11 +64,11 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['id']['eval']['fakerMethod']      = 'n
 $GLOBALS['TL_DCA']['tl_member']['fields']['id']['eval']['fakerParameter']   = [1, 9999];
 ```
 
-Gibt eine Zahl zwischen 1 und 9999 zurück, wenn ein Testwert für das Feld `tl_member.id` erstellt werden soll.
+Dies gibt eine Zahl zwischen 1 und 9999 zurück, wenn ein Testwert für das Feld `tl_member.id` erstellt werden soll.
 
 ### `fakerOptional`
 
-Mit `fakerOptional` kann die Wahrscheinlichkeit angegeben werden, mit der ein Wert erzeugt wird und was sonst als
+Mit `fakerOptional` kann die Wahrscheinlichkeit angegeben werden, mit der ein Wert erzeugt und was sonst als
 Vorgabewert zurückgegeben wird.
 
 __Beispiel:__
@@ -94,15 +94,16 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['id']['eval']['fakerParameter']   = [1
 $GLOBALS['TL_DCA']['tl_member']['fields']['id']['eval']['fakerUnique']      = true;
 ```
 
-Bei der oberen Konfiguration würde ein Fehler erzeugt, wenn keine neue Zahlen zwischen 1 und 3 mehr zurückgegeben
-werden können.
+Bei dieser Konfiguration würde ein Fehler erzeugt, wenn keine neue Zahlen zwischen 1 und 3 mehr zurückgegeben
+werden können (also beim 4. Aufruf).
 
 ### `fakerSerial`
 
 Mit der Einstellung `fakerSerial` können serialisierte Daten erstellt werden. Da Contao Mehrfachbeziehungen auf diese
-Art speichert, ist dies in Test häufig anzutreffen. Die Einstellung muss ein Array mit zwei Zahlen enthalten. Die erste
+Weise abbildet, ist dies in Test häufig anzutreffen. Die Einstellung muss ein Array mit zwei Zahlen enthalten. Die erste
 gibt die Mindestanzahl an Daten an, die erzeugt werden sollen, die zweite die Maximalzahl. Sollen auch leere Datensätze
-erzeugt  werden, wird als leerer Datensatz ein Leerstings und nicht `a:0:{}` zurückgegeben.
+erzeugt werden, wird als leerer Datensatz ein Leerstings und nicht `a:0:{}` zurückgegeben, da dies auch das Vorgehen
+von Contao ist.
 
 __Beispiel:__
 
@@ -112,7 +113,7 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['groups']['eval']['fakerParameter']   
 $GLOBALS['TL_DCA']['tl_member']['fields']['groups']['eval']['fakerSerial']      = [1,5]; // Anzahl der serialisierten Datensätze: [min., max.]
 ```
 
-In diesem Beispeil werden für jeden Eintrag 1 - 5 Zahlen erstellt und als serialisiertes Array zurückgegeben. Diese
+In diesem Beispiel werden für jeden Eintrag 1 - 5 Zahlen erstellt und als serialisiertes Array zurückgegeben. Diese
 könnten z.B. den Ids der Mitgliedergruppen entsprechen.
 
 __Wichtig__ ist hier, dass nicht 0 bis 5 eingegeben werden sollte, da sonst relativ viele leere Datensätze erzeugt
@@ -128,7 +129,7 @@ Hat man die Einstellungen im DCA hinterlegt, kann man einfach die Testwerte erze
 $factory = \Contao\System::getContainer()->get('esit_fakertoolbox.services.factories.fakerfactory');
 ```
 
-Alternativ kann man den Service auch einfach per Dependency Injection beziehn.
+Alternativ kann man den Service auch einfach per Dependency Injection beziehen.
 
 ### ContaoFaker
 
@@ -172,9 +173,10 @@ $rows = $faker->getRows(5);
 ```
 
 
-## Eigene Provider Registireren
+## Eigene Provider
 
-Eigene Provider können einfach über die Fassade registiert werden.
+Eigene Provider können einfach über die Fassade registriert werden. So können spezielle Daten erzeugt werden
+(s. [Faker Internals: Understanding Providers](https://github.com/fzaninotto/Faker#faker-internals-understanding-providers)).
 
 ```php
 $factory    = \Contao\System::getContainer()->get('esit_fakertoolbox.services.factories.fakerfactory');
@@ -187,19 +189,20 @@ $faker->addProvider(\Esit\Fakertoolbox\Classes\Provider\Internet::class);
 
 ## Mitgelieferte Provider
 
-Zusätzlich zu den Providern, die Faker bietet, werden einige spezielle Provider für Contao bereitgestellt.
+Zusätzlich zu den Providern, die Faker bietet, werden spezielle Provider für Contao bereitgestellt.
 
 ### `internetAddress`
 
-Die der Provider liefert eine Internetadresse mit Protokoll zurück (z.B. `https://www.example.org/`). In 80 % der
-Aufrufe wird die Adresse mit `www` erstellt. Die zuverwendenen Protokolle (z.B. `https://` oder `http://`) können
-angegeben werden. Wobei `https://` und `http://` Standard sind, sie müssen nicht angegeben werden.
+Der Provider liefert eine Internetadresse mit Protokoll zurück (z.B. `https://www.example.org/`). In 80 % der
+Aufrufe wird die Adresse mit `www` erstellt. Die zu verwendenden Protokolle (z.B. `https://` oder `http://`) können
+angegeben werden. Da die Protokolle `https://` und `http://` Standard sind, müssen sie nicht angegeben werden, in
+diesem Fall kann der Eintrag entfallen.
 
 __Beispiel:__
 
 ```php
 $GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerMethod']     = 'internetAddress';
-$GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerParameter']  = [['https://', 'http://']]; // kann entfallen, da die Protokolle der Standardfall sind.
+$GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerParameter']  = [['https://', 'http://']]; // kann entfallen, da diese Protokolle der Standardfall sind.
 $GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerOptional']   = [0.9, '']; // 10% chance of getting emtpy string
 ```
 
@@ -243,6 +246,17 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['loginAttempts']['eval']['fakerMethod'
 $GLOBALS['TL_DCA']['tl_member']['fields']['loginAttempts']['eval']['fakerParameter'] = [0, 3];
 $GLOBALS['TL_DCA']['tl_member']['fields']['loginAttempts']['eval']['fakerOptional']  = [0.9, 0]; // 10% chance of 0
 $GLOBALS['TL_DCA']['tl_member']['fields']['locked']['eval']['fakerMethod']           = 'unixTime';
+
+// serialisierte Daten
+$GLOBALS['TL_DCA']['tl_member']['fields']['groups']['eval']['fakerMethod']           = 'numberBetween';
+$GLOBALS['TL_DCA']['tl_member']['fields']['groups']['eval']['fakerParameter']        = [1, 10];
+$GLOBALS['TL_DCA']['tl_member']['fields']['groups']['eval']['fakerSerial']           = [1,5]; // Anzahl der serialisierten Datensätze: [min., max.]
+
+// internetAddressProvider
+$GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerMethod']          = 'internetAddress';
+$GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerParameter']       = [['https://', 'http://']];
+$GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerOptional']        = [0.9, '']; // 10% chance of getting emtpy string
+$GLOBALS['TL_DCA']['tl_member']['fields']['website']['eval']['fakerSerial']          = [1,5];
 ```
 
 ### Erstellen von 50 Datensätzen
