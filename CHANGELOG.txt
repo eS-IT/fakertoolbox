@@ -1,3 +1,6 @@
+1.2.0
+Close #9 - Option für serialisierte Daten implementieren
+
 1.1.0
 Close #8 - internetAddress-Provider schreiben
 

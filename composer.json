@@ -1,7 +1,7 @@
 {
     "name": "esit/fakertoolbox",
     "description": "Bei dieser Software handelt es sich um eine Erweiterung für das Open Source CMS Contao, die es erlaubt direkt im DCA\ndie Definition für Testdaten zu hinterlegen.",
-    "license": "LGPLv3",
+    "license": "LGPL-3.0-or-later",
     "type": "contao-bundle",
     "authors": [
         {
