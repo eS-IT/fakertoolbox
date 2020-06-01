@@ -98,9 +98,9 @@ class DcaExtractorTest extends TestCase
     public function testGetFakerOptionalReturnOptionalIfFound(): void
     {
         $GLOBALS['TL_DCA']['tl_table']['fields']['id']['eval'] = [
-            'tl_class'          => 'w50',
-            'fakerMethod'       => 'firstname',
-            'fakerOptional'     => ['test', 12]
+            'tl_class'      => 'w50',
+            'fakerMethod'   => 'firstname',
+            'fakerOptional' => ['test', 12]
         ];
         $extractor  = new DcaExtractor('tl_table');
         $rtn        = $extractor->getFakerOptional('id');
@@ -139,8 +139,8 @@ class DcaExtractorTest extends TestCase
     public function testGetFakerUniqueReturnFalseIfNotFound(): void
     {
         $GLOBALS['TL_DCA']['tl_table']['fields']['id']['eval'] = [
-            'tl_class'          => 'w50',
-            'fakerMethod'       => 'firstname'
+            'tl_class'      => 'w50',
+            'fakerMethod'   => 'firstname'
         ];
         $extractor  = new DcaExtractor('tl_table');
         $rtn        = $extractor->getFakerUnique('id');
@@ -153,7 +153,7 @@ class DcaExtractorTest extends TestCase
         $GLOBALS['TL_DCA']['tl_table']['fields']['id']['eval'] = [
             'tl_class'      => 'w50',
             'fakerMethod'   => 'firstname',
-            'fakerUnique'    => false
+            'fakerUnique'   => false
         ];
         $extractor  = new DcaExtractor('tl_table');
         $rtn        = $extractor->getFakerUnique('id');
@@ -166,10 +166,31 @@ class DcaExtractorTest extends TestCase
         $GLOBALS['TL_DCA']['tl_table']['fields']['id']['eval'] = [
             'tl_class'      => 'w50',
             'fakerMethod'   => 'firstname',
-            'fakerUnique'    => true
+            'fakerUnique'   => true
         ];
         $extractor  = new DcaExtractor('tl_table');
         $rtn        = $extractor->getFakerUnique('id');
         $this->assertTrue($rtn);
+    }
+
+    public function testGetFakerSerialDoNothingIfSerialIsNotFound(): void
+    {
+        $GLOBALS['TL_DCA']['tl_table']['fields']['id']['eval'] = ['tl_class'=>'w50', 'fakerMethod'=>'firstname'];
+        $extractor  = new DcaExtractor('tl_table');
+        $rtn        = $extractor->getFakerSerial('id');
+        $this->assertEmpty($rtn);
+    }
+
+
+    public function testGetFakerSerialReturnArrayIfFound(): void
+    {
+        $GLOBALS['TL_DCA']['tl_table']['fields']['id']['eval'] = [
+            'tl_class'      => 'w50',
+            'fakerMethod'   => 'firstname',
+            'fakerSerial'   => [1, 5]
+        ];
+        $extractor  = new DcaExtractor('tl_table');
+        $rtn        = $extractor->getFakerSerial('id');
+        $this->assertSame([1,5], $rtn);
     }
 }

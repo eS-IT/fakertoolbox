@@ -1,3 +1,6 @@
+1.1.0
+Close #8 - internetAddress-Provider schreiben
+
 1.0.4
 Close #4 - Modifier unique unterstützten
 Close #6 - Möglichkeit schaffen, den Seed für den Generator zu setzen

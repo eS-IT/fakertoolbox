@@ -97,6 +97,26 @@ $GLOBALS['TL_DCA']['tl_member']['fields']['id']['eval']['fakerUnique']      = tr
 Bei der oberen Konfiguration würde ein Fehler erzeugt, wenn keine neue Zahlen zwischen 1 und 3 mehr zurückgegeben
 werden können.
 
+### `fakerSerial`
+
+Mit der Einstellung `fakerSerial` können serialisierte Daten erstellt werden. Da Contao Mehrfachbeziehungen auf diese
+Art speichert, ist dies in Test häufig anzutreffen. Die Einstellung muss ein Array mit zwei Zahlen enthalten. Die erste
+gibt die Mindestanzahl an Daten an, die erzeugt werden sollen, die zweite die Maximalzahl. Sollen auch leere Datensätze
+erzeugt  werden, wird als leerer Datensatz ein Leerstings und nicht `a:0:{}` zurückgegeben.
+
+__Beispiel:__
+
+```php
+$GLOBALS['TL_DCA']['tl_member']['fields']['groups']['eval']['fakerMethod']      = 'numberBetween';
+$GLOBALS['TL_DCA']['tl_member']['fields']['groups']['eval']['fakerParameter']   = [1, 10];
+$GLOBALS['TL_DCA']['tl_member']['fields']['groups']['eval']['fakerSerial']      = [1,5]; // Anzahl der serialisierten Datensätze: [min., max.]
+```
+
+In diesem Beispeil werden für jeden Eintrag 1 - 5 Zahlen erstellt und als serialisiertes Array zurückgegeben. Diese
+könnten z.B. den Ids der Mitgliedergruppen entsprechen.
+
+__Wichtig__ ist hier, dass nicht 0 bis 5 eingegeben werden sollte, da sonst relativ viele leere Datensätze erzeugt
+werden. Es würde zwar funktionieren, lässt sich aber über `fakerOptional` viel besser konfigurieren.
 
 ## Verwendung
 

@@ -11,6 +11,7 @@
  */
 namespace Esit\Fakertoolbox\Classes\Faker;
 
+use Esit\Fakertoolbox\Classes\Exception\ArrayIsEmptyException;
 use Esit\Fakertoolbox\Classes\Exception\LocalStringIsEmptyException;
 use Esit\Fakertoolbox\Classes\Provider\Internet;
 use Faker\Factory;
@@ -87,11 +88,55 @@ class ContaoFakerElement
 
 
     /**
-     * Gibt einen Wert für das übergebene Feld zurück.
+     * Ruft die Erstellung der Zufallswerte auf.
      * @param  string $fieldname
      * @return mixed
      */
     public function get(string $fieldname)
+    {
+        $serial = $this->dca->getFakerSerial($fieldname);
+
+        if (\is_array($serial) && !empty($serial)) {
+            return $this->getSerialData($fieldname, $serial);
+        }
+
+        return $this->getData($fieldname);
+    }
+
+
+    /**
+     * Gibt ein serialisiertes Array mit den gewünschten Daten zurück.
+     * @param  string $fieldname
+     * @param  array  $serial
+     * @return string
+     */
+    protected function getSerialData(string $fieldname, array $serial): string
+    {
+        if (!isset($serial[0]) || !isset($serial[1])) {
+            throw new ArrayIsEmptyException('you have to set serial[min, max]');
+        }
+
+        $count  = $this->faker->numberBetween($serial[0], $serial[1]);
+        $data   = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $data[] = $this->getData($fieldname);
+        }
+
+        if (\count($data)) {
+            return \serialize($data);
+        }
+
+        return '';
+    }
+
+
+    /**
+     * Gibt einen Wert für das übergebene Feld zurück.
+     * @param  string $fieldname
+     * @return mixed
+     */
+    protected function getData(string $fieldname)
     {
         $method     = $this->dca->getFakerMethod($fieldname);
         $parameters = $this->dca->getFakerArguments($fieldname);

@@ -108,6 +108,23 @@ class DcaExtractor
     /**
      * Gibt die für das übergebene Feld zu verwendene Parameter zurück.
      * @param $fieldname
+     * @return array
+     */
+    public function getFakerSerial($fieldname): array
+    {
+        $serial = [];
+
+        if (!empty($this->dca[$fieldname]['eval']['fakerSerial'])) {
+            $serial = $this->dca[$fieldname]['eval']['fakerSerial'];
+        }
+
+        return $serial;
+    }
+
+
+    /**
+     * Gibt die für das übergebene Feld zu verwendene Parameter zurück.
+     * @param $fieldname
      * @return bool
      */
     public function getFakerUnique($fieldname): bool

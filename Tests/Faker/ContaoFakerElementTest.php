@@ -11,6 +11,7 @@
  */
 namespace Esit\Fakertoolbox\Tests\Faker;
 
+use Esit\Fakertoolbox\Classes\Exception\ArrayIsEmptyException;
 use Esit\Fakertoolbox\Classes\Exception\LocalStringIsEmptyException;
 use Esit\Fakertoolbox\Classes\Faker\ContaoFakerElement;
 use Esit\Fakertoolbox\Classes\Faker\DcaExtractor;
@@ -38,7 +39,7 @@ class ContaoFakerElementTest extends TestCase
     {
         $this->faker        = $this->getMockBuilder(Generator::class)
                                    ->disableOriginalConstructor()
-                                   ->addMethods(['optional', 'firstname', 'unique'])
+                                   ->addMethods(['optional', 'firstname', 'unique', 'numberBetween'])
                                    ->onlyMethods(['addProvider', 'seed'])
                                    ->getMock();
         $this->extractor    = $this->getMockBuilder(DcaExtractor::class)
@@ -47,6 +48,7 @@ class ContaoFakerElementTest extends TestCase
                                        'getFakerMethod',
                                        'getFakerArguments',
                                        'getFakerOptional',
+                                       'getFakerSerial',
                                        'getFakerUnique'])
                                    ->getMock();
     }
@@ -106,6 +108,59 @@ class ContaoFakerElementTest extends TestCase
         $element->setFaker($this->faker);
         $rtn = $element->get($fielname);
         $this->assertSame($expected, $rtn);
+    }
+
+
+    public function testGetThrowExceptionIfSerialIsNotAnArrayWithTwoElements(): void
+    {
+        $fielname = 'name';
+        $this->extractor->expects($this->once())->method('getFakerSerial')->with($fielname)->willReturn([1]);
+        $this->faker->expects($this->never())->method('numberBetween');
+        $element = new ContaoFakerElement($this->extractor);
+        $element->setFaker($this->faker);
+        $this->expectException(ArrayIsEmptyException::class);
+        $this->expectExceptionMessage('you have to set serial[min, max]');
+        $element->get($fielname);
+    }
+
+
+    public function testGetCallSerial(): void
+    {
+        $count      = 3;
+        $fielname   = 'name';
+        $expected   = 'Martin';
+        $this->extractor->expects($this->exactly($count))->method('getFakerMethod')->with($fielname)->willReturn('firstname');
+        $this->extractor->expects($this->exactly($count))->method('getFakerArguments')->with($fielname)->willReturn([]);
+        $this->extractor->expects($this->exactly($count))->method('getFakerOptional')->with($fielname)->willReturn([]);
+        $this->extractor->expects($this->once())->method('getFakerSerial')->with($fielname)->willReturn([1,5]);
+        $this->extractor->expects($this->exactly($count))->method('getFakerUnique')->with($fielname)->willReturn(false);
+        $this->faker->expects($this->once())->method('numberBetween')->with(1,5)->willReturn($count);
+        $this->faker->expects($this->exactly($count))->method('firstname')->willReturn($expected);
+        $this->faker->expects($this->never())->method('optional');
+        $element = new ContaoFakerElement($this->extractor);
+        $element->setFaker($this->faker);
+        $rtn = $element->get($fielname);
+        $this->assertSame(\serialize([$expected, $expected, $expected]), $rtn);
+    }
+
+
+    public function testGetReturnEmtpyStringIfOptional(): void
+    {
+        $count      = 0;
+        $fielname   = 'name';
+        $expected   = 'Martin';
+        $this->extractor->expects($this->exactly($count))->method('getFakerMethod')->with($fielname)->willReturn('firstname');
+        $this->extractor->expects($this->exactly($count))->method('getFakerArguments')->with($fielname)->willReturn([]);
+        $this->extractor->expects($this->exactly($count))->method('getFakerOptional')->with($fielname)->willReturn([]);
+        $this->extractor->expects($this->once())->method('getFakerSerial')->with($fielname)->willReturn([0,5]);
+        $this->extractor->expects($this->exactly($count))->method('getFakerUnique')->with($fielname)->willReturn(false);
+        $this->faker->expects($this->once())->method('numberBetween')->with(0,5)->willReturn($count);
+        $this->faker->expects($this->never())->method('firstname');
+        $this->faker->expects($this->never())->method('optional');
+        $element = new ContaoFakerElement($this->extractor);
+        $element->setFaker($this->faker);
+        $rtn = $element->get($fielname);
+        $this->assertSame('', $rtn);
     }
 
 
