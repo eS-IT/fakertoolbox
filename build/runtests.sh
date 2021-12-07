@@ -87,16 +87,6 @@ toolFolder="${configFolder}/tools"
 classesFolder='./Classes'
 
 
-## generate CHANGELOG.txt
-if [ -f /home/pfroch/bin/gitchangelog ]
-then
-    myshortecho "Erstelle CHANGELOG.txt"
-    /home/pfroch/bin/gitchangelog `pwd`
-else
-    myshortecho "/home/pfroch/bin/gitchangelog nicht gefunden!"
-fi
-
-
 ## validate compser.json
 if [ -f ${toolFolder}/composer.phar ]
 then
