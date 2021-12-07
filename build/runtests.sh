@@ -87,16 +87,6 @@ toolFolder="${configFolder}/tools"
 classesFolder='./Classes'
 
 
-## generate CHANGELOG.txt
-if [ -f /home/pfroch/bin/gitchangelog ]
-then
-    myshortecho "Erstelle CHANGELOG.txt"
-    /home/pfroch/bin/gitchangelog `pwd`
-else
-    myshortecho "/home/pfroch/bin/gitchangelog nicht gefunden!"
-fi
-
-
 ## validate compser.json
 if [ -f ${toolFolder}/composer.phar ]
 then
@@ -287,11 +277,11 @@ fi
 echo
 
 ## PHPUnit
-if [ -f ${toolFolder}/phpunit ]
+if [ -f ../../../vendor/bin/phpunit ]
 then
-    # PHPUnit als Phar in build installiert
-    myecho "Führe UnitTests mit Phar PHPUnit durch"
-    ${toolFolder}/phpunit --configuration ${configFolder}/phpunit/phpunit.xml.dist --testdox
+    # PHPUnit gobal mit composer installiert
+    myecho "Führe UnitTests mit globalem PHPUnit durch"
+    XDEBUG_MODE=coverage ../../../vendor/bin/phpunit --configuration ${configFolder}/phpunit/phpunit.xml.dist --testdox
     tmperr=$?
 
     if [ ${tmperr} -ne 0 ]
@@ -300,21 +290,7 @@ then
         myerror "Es ist ein Fehler ausgetreten [${tmperr}]"
     fi
 else
-    if [ -f ../../../vendor/bin/phpunit ]
-    then
-        # PHPUnit gobal mit composer installiert
-        myecho "Führe UnitTests mit globalem PHPUnit durch"
-        ../../../vendor/bin/phpunit --configuration ${configFolder}/phpunit/phpunit.xml.dist --testdox
-        tmperr=$?
-
-        if [ ${tmperr} -ne 0 ]
-        then
-            error=${tmperr}
-            myerror "Es ist ein Fehler ausgetreten [${tmperr}]"
-        fi
-    else
-        myinfo "Ausführen der UnitTests ausgelassen. PHPUnit nicht vorhanden!"
-    fi
+    myinfo "Ausführen der UnitTests ausgelassen. PHPUnit nicht vorhanden!"
 fi
 
 
