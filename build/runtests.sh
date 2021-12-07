@@ -277,11 +277,11 @@ fi
 echo
 
 ## PHPUnit
-if [ -f ${toolFolder}/phpunit ]
+if [ -f ../../../vendor/bin/phpunit ]
 then
-    # PHPUnit als Phar in build installiert
-    myecho "Führe UnitTests mit Phar PHPUnit durch"
-    ${toolFolder}/phpunit --configuration ${configFolder}/phpunit/phpunit.xml.dist --testdox
+    # PHPUnit gobal mit composer installiert
+    myecho "Führe UnitTests mit globalem PHPUnit durch"
+    XDEBUG_MODE=coverage ../../../vendor/bin/phpunit --configuration ${configFolder}/phpunit/phpunit.xml.dist --testdox
     tmperr=$?
 
     if [ ${tmperr} -ne 0 ]
@@ -290,21 +290,7 @@ then
         myerror "Es ist ein Fehler ausgetreten [${tmperr}]"
     fi
 else
-    if [ -f ../../../vendor/bin/phpunit ]
-    then
-        # PHPUnit gobal mit composer installiert
-        myecho "Führe UnitTests mit globalem PHPUnit durch"
-        ../../../vendor/bin/phpunit --configuration ${configFolder}/phpunit/phpunit.xml.dist --testdox
-        tmperr=$?
-
-        if [ ${tmperr} -ne 0 ]
-        then
-            error=${tmperr}
-            myerror "Es ist ein Fehler ausgetreten [${tmperr}]"
-        fi
-    else
-        myinfo "Ausführen der UnitTests ausgelassen. PHPUnit nicht vorhanden!"
-    fi
+    myinfo "Ausführen der UnitTests ausgelassen. PHPUnit nicht vorhanden!"
 fi
 
 
