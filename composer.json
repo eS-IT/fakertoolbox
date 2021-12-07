@@ -15,7 +15,7 @@
         "email": "info@easySolutionsIT.de"
     },
     "require": {
-        "php": "^7.2",
+        "php": "^7.2||^8.0",
         "contao/core-bundle": "^4.4",
         "contao/manager-bundle": "^4.4",
         "contao/conflicts": "@dev",

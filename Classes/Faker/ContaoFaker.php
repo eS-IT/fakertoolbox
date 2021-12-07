@@ -82,6 +82,7 @@ class ContaoFaker
     public function getRow(): array
     {
         $rows = $this->collection->getRows(1);  // multideminsionales Array
+
         return \array_shift($rows);             // erste Zeile zurückgeben
     }
 
