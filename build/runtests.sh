@@ -2,7 +2,7 @@
 #
 # =============================================================================
 #title:         runtests.sh
-#description:   Führt die Tests der Softwate aus
+#description:   Führt die Tests der Software aus
 #author:        pfroch <patrick.froch@easySolutionsIT.de>
 #date:          20180819
 #version:       1.0.0
