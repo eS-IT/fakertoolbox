@@ -32,5 +32,6 @@
     },
     "extra": {
         "contao-manager-plugin": "Esit\\Fakertoolbox\\Classes\\Contao\\Manager\\Plugin"
-    }
+    },
+    "abandoned": true
 }
