@@ -1,4 +1,4 @@
-# Fakertoolbox
+# Fakertoolbox [DEPRECATED]
 
 
 ## Beschreibung
